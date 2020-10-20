@@ -28,29 +28,34 @@ class ColorViewController: UIViewController {
         redValueLabel.text = String(Int(redSlider.value.rounded()))
         greenValueLabel.text = String(Int(greenSlider.value.rounded()))
         blueValueLabel.text = String(Int(greenSlider.value.rounded()))
-        backgroundChangeView.backgroundColor = self.setBackground()
+        
+        setBackground()
     }
     
-    func setBackground() -> UIColor {
-        return UIColor(
+    func setBackground() {
+        backgroundChangeView.backgroundColor = UIColor(
             red: CGFloat(round(redSlider.value)/255.0),
             green: CGFloat(round(greenSlider.value)/255.0),
             blue: CGFloat(round(blueSlider.value)/255.0),
             alpha: 1.0)
     }
 
-    @IBAction func changeRedColor() {
-        redValueLabel.text = String(Int(redSlider.value.rounded()))
-        backgroundChangeView.backgroundColor = self.setBackground()
+    @IBAction func changeColor(_ sender: UISlider) {
+        switch sender.tag {
+        case 1:
+            redValueLabel.text = String(Int(redSlider.value.rounded()))
+            break
+        case 2:
+            redValueLabel.text = String(Int(redSlider.value.rounded()))
+            break
+        case 3:
+            redValueLabel.text = String(Int(redSlider.value.rounded()))
+            break
+        default:
+            break
+        }
+        
+        setBackground()
     }
-    @IBAction func changeGreenColor() {
-        greenValueLabel.text = String(Int(greenSlider.value.rounded()))
-        backgroundChangeView.backgroundColor = self.setBackground()
-    }
-    @IBAction func changeBlueColor() {
-        blueValueLabel.text = String(Int(blueSlider.value.rounded()))
-        backgroundChangeView.backgroundColor = self.setBackground()
-    }
-    
 }
 
