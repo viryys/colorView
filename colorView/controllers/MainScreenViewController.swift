@@ -8,7 +8,7 @@
 import UIKit
 
 protocol ColorViewControllerDelegate {
-    func saveColor(redColor: CGFloat, greenColor: CGFloat, blueColor: CGFloat)
+    func saveColor(_ bgColor: UIColor)
 }
 
 class MainScreenViewController: UIViewController {
@@ -36,8 +36,8 @@ class MainScreenViewController: UIViewController {
 }
 
 extension MainScreenViewController: ColorViewControllerDelegate {
-    func saveColor(redColor: CGFloat = 1, greenColor: CGFloat = 1, blueColor: CGFloat = 1) {
-        bgColor = UIColor(red: redColor, green: greenColor, blue: blueColor, alpha: 1.0)
+    func saveColor(_ bgColor: UIColor) {
+        self.bgColor = bgColor
         view.backgroundColor = bgColor
     }
 }

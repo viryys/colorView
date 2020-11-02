@@ -50,7 +50,7 @@ class ColorViewController: UIViewController {
         
         redValueLabel.text = String(Int(redSlider.value.rounded()))
         greenValueLabel.text = String(Int(greenSlider.value.rounded()))
-        blueValueLabel.text = String(Int(greenSlider.value.rounded()))
+        blueValueLabel.text = String(Int(blueSlider.value.rounded()))
     }
     
     private func configButton() {
@@ -86,9 +86,13 @@ class ColorViewController: UIViewController {
     }
     
     @IBAction func saveColor() {
-        delegate.saveColor(redColor: CGFloat(round(redSlider.value)/255.0),
-                           greenColor: CGFloat(round(greenSlider.value)/255.0),
-                           blueColor: CGFloat(round(blueSlider.value)/255.0))
+        
+        delegate.saveColor(UIColor(
+            red: CGFloat(round(redSlider.value)/255.0),
+            green: CGFloat(round(greenSlider.value)/255.0),
+            blue: CGFloat(round(blueSlider.value)/255.0),
+            alpha: 1.0
+        ))
         
         dismiss(animated: true)
     }
