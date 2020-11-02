@@ -27,7 +27,7 @@ class ColorViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view.backgroundColor = backgroundMainVC
+        self.view.backgroundColor = .darkGray
         backgroundChangeView.layer.cornerRadius = 10
         
         let splitUIColor = CIColor(color: backgroundMainVC)
@@ -38,12 +38,19 @@ class ColorViewController: UIViewController {
         greenSlider.value = Float(splitUIColor.green * 255).rounded()
         blueSlider.value = Float(splitUIColor.blue * 255).rounded()
         
+        configLabels()
+        configButton()
+        setBackground()
+    }
+    
+    private func configLabels() {
+        redValueLabel.textColor = .white
+        greenValueLabel.textColor = .white
+        blueValueLabel.textColor = .white
+        
         redValueLabel.text = String(Int(redSlider.value.rounded()))
         greenValueLabel.text = String(Int(greenSlider.value.rounded()))
         blueValueLabel.text = String(Int(greenSlider.value.rounded()))
-        
-        configButton()
-        setBackground()
     }
     
     private func configButton() {
