@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ColorViewController: UIViewController {
+class ColorViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var backgroundChangeView: UIView!
     
@@ -18,6 +18,10 @@ class ColorViewController: UIViewController {
     @IBOutlet weak var redSlider: UISlider!
     @IBOutlet weak var greenSlider: UISlider!
     @IBOutlet weak var blueSlider: UISlider!
+    
+    @IBOutlet weak var redTextField: UITextField!
+    @IBOutlet weak var greenTextField: UITextField!
+    @IBOutlet weak var blueTextField: UITextField!
     
     @IBOutlet weak var doneButton: UIButton!
     
@@ -39,8 +43,40 @@ class ColorViewController: UIViewController {
         blueSlider.value = Float(splitUIColor.blue * 255).rounded()
         
         configLabels()
+        configTextFields()
         configButton()
         setBackground()
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField == redTextField {
+            textField.resignFirstResponder()
+            greenTextField.becomeFirstResponder()
+        } else if textField == greenTextField {
+            textField.resignFirstResponder()
+            blueTextField.becomeFirstResponder()
+        } else if textField == blueTextField {
+            saveColor()
+        }
+        return true
+    }
+    
+    private func configTextFields() {
+        redTextField.backgroundColor = .white
+        greenTextField.backgroundColor = .white
+        blueTextField.backgroundColor = .white
+        
+        redTextField.returnKeyType = UIReturnKeyType.next
+        greenTextField.returnKeyType = UIReturnKeyType.next
+        blueTextField.returnKeyType = UIReturnKeyType.done
+        
+        redTextField.text = String(Int(redSlider.value.rounded()))
+        greenTextField.text = String(Int(greenSlider.value.rounded()))
+        blueTextField.text = String(Int(blueSlider.value.rounded()))
     }
     
     private func configLabels() {
@@ -66,23 +102,31 @@ class ColorViewController: UIViewController {
             blue: CGFloat(round(blueSlider.value)/255.0),
             alpha: 1.0)
     }
+    
 
     @IBAction func changeColor(_ sender: UISlider) {
         switch sender.tag {
         case 1:
             redValueLabel.text = String(Int(redSlider.value.rounded()))
+            redTextField.text = String(Int(redSlider.value.rounded()))
             break
         case 2:
             greenValueLabel.text = String(Int(greenSlider.value.rounded()))
+            greenTextField.text = String(Int(greenSlider.value.rounded()))
             break
         case 3:
             blueValueLabel.text = String(Int(blueSlider.value.rounded()))
+            blueTextField.text = String(Int(blueSlider.value.rounded()))
             break
         default:
             break
         }
         
         setBackground()
+    }
+    
+    @IBAction func submitTextFIeld(_ sender: UITextField) {
+        print(sender.tag)
     }
     
     @IBAction func saveColor() {
