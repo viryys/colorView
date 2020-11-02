@@ -56,16 +56,48 @@ class ColorViewController: UIViewController, UITextFieldDelegate {
         if textField == redTextField {
             textField.resignFirstResponder()
             greenTextField.becomeFirstResponder()
+            
+            if redSlider.maximumValue < Float(redTextField.text!) ?? 0 {
+                redTextField.text = String(Int(redSlider.maximumValue))
+            }
+            
+            redSlider.value = Float(redTextField.text!) ?? 0
+            redValueLabel.text = textFormat(redSlider.value)
         } else if textField == greenTextField {
             textField.resignFirstResponder()
             blueTextField.becomeFirstResponder()
+            
+            if greenSlider.maximumValue < Float(greenTextField.text!) ?? 0 {
+                greenTextField.text = String(Int(greenSlider.maximumValue))
+            }
+            
+            greenSlider.value = Float(greenTextField.text!) ?? 0
+            greenValueLabel.text = textFormat(greenSlider.value)
         } else if textField == blueTextField {
-            saveColor()
+            print("blue text field")
+            if blueSlider.maximumValue < Float(blueTextField.text!) ?? 0 {
+                blueTextField.text = String(Int(blueSlider.maximumValue))
+            }
+            
+            blueSlider.value = Float(blueTextField.text!) ?? 0
+            blueValueLabel.text = textFormat(blueSlider.value)
+            
+            view.endEditing(true)
         }
+        setBackground()
+        
         return true
     }
     
+    private func textFormat(_ number: Float) -> String {
+        return String(Int(number.rounded()))
+    }
+    
     private func configTextFields() {
+        redTextField.delegate = self
+        greenTextField.delegate = self
+        blueTextField.delegate = self
+        
         redTextField.backgroundColor = .white
         greenTextField.backgroundColor = .white
         blueTextField.backgroundColor = .white
@@ -74,9 +106,9 @@ class ColorViewController: UIViewController, UITextFieldDelegate {
         greenTextField.returnKeyType = UIReturnKeyType.next
         blueTextField.returnKeyType = UIReturnKeyType.done
         
-        redTextField.text = String(Int(redSlider.value.rounded()))
-        greenTextField.text = String(Int(greenSlider.value.rounded()))
-        blueTextField.text = String(Int(blueSlider.value.rounded()))
+        redTextField.text = textFormat(redSlider.value)
+        greenTextField.text = textFormat(greenSlider.value)
+        blueTextField.text = textFormat(blueSlider.value)
     }
     
     private func configLabels() {
@@ -84,9 +116,9 @@ class ColorViewController: UIViewController, UITextFieldDelegate {
         greenValueLabel.textColor = .white
         blueValueLabel.textColor = .white
         
-        redValueLabel.text = String(Int(redSlider.value.rounded()))
-        greenValueLabel.text = String(Int(greenSlider.value.rounded()))
-        blueValueLabel.text = String(Int(blueSlider.value.rounded()))
+        redValueLabel.text = textFormat(redSlider.value)
+        greenValueLabel.text = textFormat(greenSlider.value)
+        blueValueLabel.text = textFormat(blueSlider.value)
     }
     
     private func configButton() {
@@ -103,20 +135,30 @@ class ColorViewController: UIViewController, UITextFieldDelegate {
             alpha: 1.0)
     }
     
+    private func clickDone() {
+        delegate.saveColor(UIColor(
+            red: CGFloat(round(redSlider.value)/255.0),
+            green: CGFloat(round(greenSlider.value)/255.0),
+            blue: CGFloat(round(blueSlider.value)/255.0),
+            alpha: 1.0
+        ))
+        
+        dismiss(animated: true)
+    }
 
     @IBAction func changeColor(_ sender: UISlider) {
         switch sender.tag {
         case 1:
-            redValueLabel.text = String(Int(redSlider.value.rounded()))
-            redTextField.text = String(Int(redSlider.value.rounded()))
+            redValueLabel.text = textFormat(redSlider.value)
+            redTextField.text = textFormat(redSlider.value)
             break
         case 2:
-            greenValueLabel.text = String(Int(greenSlider.value.rounded()))
-            greenTextField.text = String(Int(greenSlider.value.rounded()))
+            greenValueLabel.text = textFormat(greenSlider.value)
+            greenTextField.text = textFormat(greenSlider.value)
             break
         case 3:
-            blueValueLabel.text = String(Int(blueSlider.value.rounded()))
-            blueTextField.text = String(Int(blueSlider.value.rounded()))
+            blueValueLabel.text = textFormat(blueSlider.value)
+            blueTextField.text = textFormat(blueSlider.value)
             break
         default:
             break
@@ -126,19 +168,12 @@ class ColorViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func submitTextFIeld(_ sender: UITextField) {
+        print("submitTextFIeld")
         print(sender.tag)
     }
     
     @IBAction func saveColor() {
-        
-        delegate.saveColor(UIColor(
-            red: CGFloat(round(redSlider.value)/255.0),
-            green: CGFloat(round(greenSlider.value)/255.0),
-            blue: CGFloat(round(blueSlider.value)/255.0),
-            alpha: 1.0
-        ))
-        
-        dismiss(animated: true)
+        clickDone()
     }
 }
 
