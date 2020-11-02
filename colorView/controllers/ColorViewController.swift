@@ -8,7 +8,7 @@
 import UIKit
 
 class ColorViewController: UIViewController {
-
+    
     @IBOutlet weak var backgroundChangeView: UIView!
     
     @IBOutlet weak var redValueLabel: UILabel!
@@ -19,20 +19,40 @@ class ColorViewController: UIViewController {
     @IBOutlet weak var greenSlider: UISlider!
     @IBOutlet weak var blueSlider: UISlider!
     
+    @IBOutlet weak var doneButton: UIButton!
+    
+    var delegate: ColorViewControllerDelegate!
+    var backgroundMainVC: UIColor!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view.backgroundColor = .white
+        self.view.backgroundColor = backgroundMainVC
         backgroundChangeView.layer.cornerRadius = 10
+        
+        let splitUIColor = CIColor(color: backgroundMainVC)
+        
+        print("red", CGFloat(splitUIColor.red), "green", splitUIColor.green, "blue", splitUIColor.blue)
+        
+        redSlider.value = Float(splitUIColor.red * 255).rounded()
+        greenSlider.value = Float(splitUIColor.green * 255).rounded()
+        blueSlider.value = Float(splitUIColor.blue * 255).rounded()
         
         redValueLabel.text = String(Int(redSlider.value.rounded()))
         greenValueLabel.text = String(Int(greenSlider.value.rounded()))
         blueValueLabel.text = String(Int(greenSlider.value.rounded()))
         
+        configButton()
         setBackground()
     }
     
-    func setBackground() {
+    private func configButton() {
+        doneButton.backgroundColor = .magenta
+        doneButton.layer.cornerRadius = 8
+        doneButton.tintColor = .white
+    }
+    
+    private func setBackground() {
         backgroundChangeView.backgroundColor = UIColor(
             red: CGFloat(round(redSlider.value)/255.0),
             green: CGFloat(round(greenSlider.value)/255.0),
@@ -46,16 +66,24 @@ class ColorViewController: UIViewController {
             redValueLabel.text = String(Int(redSlider.value.rounded()))
             break
         case 2:
-            redValueLabel.text = String(Int(redSlider.value.rounded()))
+            greenValueLabel.text = String(Int(greenSlider.value.rounded()))
             break
         case 3:
-            redValueLabel.text = String(Int(redSlider.value.rounded()))
+            blueValueLabel.text = String(Int(blueSlider.value.rounded()))
             break
         default:
             break
         }
         
         setBackground()
+    }
+    
+    @IBAction func saveColor() {
+        delegate.saveColor(redColor: CGFloat(round(redSlider.value)/255.0),
+                           greenColor: CGFloat(round(greenSlider.value)/255.0),
+                           blueColor: CGFloat(round(blueSlider.value)/255.0))
+        
+        dismiss(animated: true)
     }
 }
 
